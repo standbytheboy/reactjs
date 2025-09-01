@@ -27,16 +27,11 @@
     gap: 20px;
 }
 
-.card {
-    min-width: 300px;
-    min-height: 300px;
-    background-color: red;
-}
-
 .cards-container {
     display: flex;
-    gap: 50px;
+    gap: 10px;
     overflow-x: scroll;
+    height: 400px;
 }
 
 .cards-container::-webkit-scrollbar {

@@ -1,6 +1,6 @@
 .category-card {
     border-radius: 12px;
-    width: 280px;
+    min-width: 280px;
     height: 350px;
     margin: 10px;
 }
