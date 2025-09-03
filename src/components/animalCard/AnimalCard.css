@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin: 0 5rem;
+    margin: 0 4.5rem;
 }
 
 .animal-image-wrapper {
@@ -15,7 +15,12 @@
     border-radius: 50%;
     position: relative;
     cursor: pointer;
+    transition: ease-in-out .5s;
     background-color: #333;
+}
+
+.animal-image-wrapper:hover {
+    background: linear-gradient(#F87537, #FBA81F);
 }
 
 .animal-image {
