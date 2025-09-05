@@ -12,7 +12,7 @@ const animais = [
     { name: 'Hamster', image: HamsterImg }, // INDEX 1
     { name: 'Cachorro', image: CachorroImg }, // INDEX 2
     { name: 'Papagaio', image: PapagaioImg },
-    { name: 'Coelho', image: CoelhoImg },
+    { name: 'Coelho', image: CoelhoImg }, 
     { name: 'Tartaruga', image: TartarugaImg }
 ]
 
