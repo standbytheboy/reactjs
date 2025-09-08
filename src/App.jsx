@@ -1,11 +1,11 @@
 import './App.css'
-import ShopSidebar from './components/shopSidebar/ShopSidebar'
+import ProductGrid from './components/productGrid/ProductGrid'
 
 function App() {
 
   return (
     <>
-    <ShopSidebar />
+      <ProductGrid />
     </>
   )
 }

@@ -14,13 +14,13 @@ const ShopSidebar = ({ listaDeCategorias, listaDeMarcas }) => {
             <div className='filter-group'>
                 <h4>Filtrar por Categoria</h4>
                 <ul>
-                    { listaDeCategorias.map((categoria) => {
+                    { listaDeCategorias.map((categoria) => (
                         <li key={categoria.nome} className='checkbox-item'>
                             <input type="checkbox" id={categoria} />
                             <label> {categoria.nome} </label>
                             <span className='qtd-categoria'> {categoria.qtd} </span>
                         </li>
-                    })}
+                    ))}
                 </ul>
             </div>
 
@@ -47,7 +47,7 @@ const ShopSidebar = ({ listaDeCategorias, listaDeMarcas }) => {
                     <h4>Filtrar por Marca</h4>
                     <ul>
                         {listaDeMarcas.map((marca) => (
-                            <li key={marca} className='checkbox-item'>
+                            <li key={marca.nome} className='checkbox-item'>
                                 <input type="checkbox" id={marca.nome}/>
                                 <label htmlFor={marca.nome}>{marca.nome}</label>
                                 <span className='qtd-categoria'>{marca.qtd}</span>
