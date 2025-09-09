@@ -48,23 +48,6 @@
     width: 300px;
 }
 
-.rc-slider-track {
-    background-color: #FD7E14;
-    height: 6px;
-}
-
-.rc-slider-handle {
-    width: 20px;
-    height: 20px;
-    background-color: #FD7E14;
-    border-radius: 50%;
-    margin-top: -7px;
-
-    &:focus, &:active {
-        box-shadow: 0 0 0 5px rgba(255, 140, 56, 0.2);
-    }
-}
-
 .price-info {
     display: flex;
     justify-content: space-between;

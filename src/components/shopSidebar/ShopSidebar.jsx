@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import './ShopSidebar.css';
 import Slider from 'rc-slider';
+import "rc-slider/assets/index.css";
+import './ShopSidebar.css';
+
 
 const ShopSidebar = ({ listaDeCategorias, listaDeMarcas }) => {
     const [priceRange, setPriceRange] = useState([0, 500])
 
     const aplicarFiltroPreco = () => {
-        console.log(`Filtro de preço aplicado: R\$ ${priceRange[0]} - R\$ ${priceRange[1]}`)
+        console.log(`Filtro de preço aplicado: R$ ${priceRange[0]} - R$ ${priceRange[1]}`)
     }
 
     return (
@@ -32,7 +34,15 @@ const ShopSidebar = ({ listaDeCategorias, listaDeMarcas }) => {
                     min={0}
                     max={500}
                     defaultValue={priceRange}
-                    onChange={(newRange) => (setPriceRange(newRange))} />
+                    onChange={(newRange) => (setPriceRange(newRange))}
+                    styles={{
+    track: { backgroundColor: 'orange' },
+    rail: { backgroundColor: '#ffd8a6' },
+    handle: {
+      borderColor: 'orange',
+      backgroundColor: 'white',
+    },
+  }}/>
 
                     <div className='price-info'>
                         <span>
