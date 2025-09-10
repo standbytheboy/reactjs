@@ -1,11 +1,16 @@
 import './App.css'
-import ProductGrid from './components/productGrid/ProductGrid'
+import Home from './pages/Home'
+import { Route, Routes } from 'react-router-dom'
 
 function App() {
 
   return (
     <>
-      <ProductGrid />
+      <Routes>
+
+        <Route path='/' element={<Home />}/>
+
+      </Routes>
     </>
   )
 }

@@ -13,7 +13,8 @@
     "akar-icons": "^1.9.31",
     "rc-slider": "^11.1.8",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.8.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",

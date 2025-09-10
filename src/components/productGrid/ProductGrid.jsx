@@ -38,15 +38,15 @@ const todosProdutos = [
 ];
 
 const listaDeCategorias = [
-  { name: "Brinquedos", qtd: 32 }, // índice 0
-  { name: "Roupas", qtd: 30 }, // índice 1
-  { name: "Comidas", qtd: 100 },
+  { nome: "Brinquedos", qtd: 32 }, // índice 0
+  { nome: "Roupas", qtd: 30 }, // índice 1
+  { nome: "Comidas", qtd: 100 },
 ];
  
 const listaDeMarcas = [
-  { name: "Royal Canin", qtd: 30 },
-  { name: "K9 Spirit", qtd: 20 },
-  { name: "Premier", qtd: 10 },
+  { nome: "Royal Canin", qtd: 30 },
+  { nome: "K9 Spirit", qtd: 20 },
+  { nome: "Premier", qtd: 10 },
 ];
 
 const ProductGrid = () => {
