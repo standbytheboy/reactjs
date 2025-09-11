@@ -30,69 +30,64 @@ const ProductGrid = () => {
   const API_SECRET = "key_aqui";
 
   const obterToken = async () => {
-  const response = await axios.post(
-    "https://api.petfinder.com/v2/oauth2/token",
-    `grant_type=client_credentials&client_id=${API_KEY}&client_secret=${API_SECRET}`,
-    {
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    }
-  );
-  return response.data.access_token;
-};
-
-const buscarPets = async (token, pagina, limite) => {
-  const response = await axios.get(
-    `/pf-api/animals?page=${pagina}&limit=${limite}&type=Dog`,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
-  );
-  return response.data;
-};
-
-
- useEffect(() => {
-  const fetchTokenAndPets = async () => {
-    if (loading) return;
-    setLoading(true);
-
-    try {
-      const token = await obterToken();
-      const data = await buscarPets(token, paginaAtual, produtosPorPagina);
-
-      const petsComImagem = data.animals.filter(
-        (pet) =>
-          pet.primary_photo_cropped || (pet.photos && pet.photos.length > 0)
-      );
-
-      const formattedPets = petsComImagem.map((pet) => ({
-        id: pet.id,
-        name: pet.name,
-        price: pet.breeds.primary,
-        image:
-          pet.primary_photo_cropped?.medium || pet.photos[0]?.medium,
-      }));
-
-      setPets(formattedPets);
-
-      const totalConsiderado = Math.min(
-        MAXIMO_DE_ANIMAIS,
-        data.pagination.total_count
-      );
-
-      setTotalDePaginas(
-        Math.ceil(totalConsiderado / produtosPorPagina)
-      );
-    } catch (error) {
-      console.error("Erro ao buscar dados da Petfinder API:", error);
-    } finally {
-      setLoading(false);
-    }
+    const response = await axios.post(
+      "https://api.petfinder.com/v2/oauth2/token",
+      `grant_type=client_credentials&client_id=${API_KEY}&client_secret=${API_SECRET}`,
+      {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      }
+    );
+    return response.data.access_token;
   };
 
-  fetchTokenAndPets();
-}, [paginaAtual]);
+  const buscarPets = async (token, pagina, limite) => {
+    const response = await axios.get(
+      `/pf-api/animals?page=${pagina}&limit=${limite}&type=Dog`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return response.data;
+  };
 
+  useEffect(() => {
+    const fetchTokenAndPets = async () => {
+      if (loading) return;
+      setLoading(true);
+
+      try {
+        const token = await obterToken();
+        const data = await buscarPets(token, paginaAtual, produtosPorPagina);
+
+        const petsComImagem = data.animals.filter(
+          (pet) =>
+            pet.primary_photo_cropped || (pet.photos && pet.photos.length > 0)
+        );
+
+        const formattedPets = petsComImagem.map((pet) => ({
+          id: pet.id,
+          name: pet.name,
+          price: pet.breeds.primary,
+          image: pet.primary_photo_cropped?.medium || pet.photos[0]?.medium,
+        }));
+
+        setPets(formattedPets);
+
+        const totalConsiderado = Math.min(
+          MAXIMO_DE_ANIMAIS,
+          data.pagination.total_count
+        );
+
+        setTotalDePaginas(Math.ceil(totalConsiderado / produtosPorPagina));
+      } catch (error) {
+        console.error("Erro ao buscar dados da Petfinder API:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTokenAndPets();
+  }, [paginaAtual]);
 
   const mudarPaginaAtual = (numeroDaPagina) => {
     setPaginaAtual(numeroDaPagina);
