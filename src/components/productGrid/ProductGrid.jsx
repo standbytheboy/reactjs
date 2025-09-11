@@ -26,74 +26,73 @@ const ProductGrid = () => {
   const produtosPorPagina = 6;
   const MAXIMO_DE_ANIMAIS = 50;
 
-  const API_KEY = "suakeyaqui";
-  const API_SECRET = "suakeyaqui";
+  const API_KEY = "key_aqui";
+  const API_SECRET = "key_aqui";
 
-  useEffect(() => {
-    const fetchTokenAndPets = async () => {
-      if (loading) return; // 2. Previne novas chamadas se uma já estiver em andamento
-      setLoading(true);
+  const obterToken = async () => {
+  const response = await axios.post(
+    "https://api.petfinder.com/v2/oauth2/token",
+    `grant_type=client_credentials&client_id=${API_KEY}&client_secret=${API_SECRET}`,
+    {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    }
+  );
+  return response.data.access_token;
+};
 
-      try {
-        // 3. A chamada para o token NÃO usa o proxy, pois é uma URL diferente
-        const tokenResponse = await axios.post(
-          "https://api.petfinder.com/v2/oauth2/token",
-          `grant_type=client_credentials&client_id=${API_KEY}&client_secret=${API_SECRET}`,
-          {
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          }
-        );
-        const accessToken = tokenResponse.data.access_token;
+const buscarPets = async (token, pagina, limite) => {
+  const response = await axios.get(
+    `/pf-api/animals?page=${pagina}&limit=${limite}&type=Dog`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+  return response.data;
+};
 
-        // 4. A chamada para os animais AGORA USA O PROXY
-        // Note que a URL começa com '/pf-api'
-        const petsResponse = await axios.get(
-          `/pf-api/animals?page=${paginaAtual}&limit=${produtosPorPagina}&type=Dog`,
-          {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          }
-        );
 
-        const petsComImagem = petsResponse.data.animals.filter(
-          (pet) =>
-            pet.primary_photo_cropped || (pet.photos && pet.photos.length > 0)
-        );
+ useEffect(() => {
+  const fetchTokenAndPets = async () => {
+    if (loading) return;
+    setLoading(true);
 
-        // Mapeia os dados da API para o formato que seu ProductCard espera
-        const formattedPets = petsComImagem.map((pet) => {
-          const imageUrl =
-            pet.primary_photo_cropped?.medium || pet.photos[0]?.medium;
-          return {
-            id: pet.id,
-            name: pet.name,
-            price: pet.breeds.primary,
-            image: imageUrl,
-          };
-        });
+    try {
+      const token = await obterToken();
+      const data = await buscarPets(token, paginaAtual, produtosPorPagina);
 
-        setPets(formattedPets);
-        // Calculamos nosso próprio total de páginas
-        const totalDeAnimaisNaAPI = petsResponse.data.pagination.total_count;
-        // O total de animais a considerar é o MENOR entre o nosso limite e o total real da API
-        const totalConsiderado = Math.min(
-          MAXIMO_DE_ANIMAIS,
-          totalDeAnimaisNaAPI
-        );
-        // Agora calculamos o total de páginas com base nesse número
-        const nossoTotalDePaginas = Math.ceil(
-          totalConsiderado / produtosPorPagina
-        );
+      const petsComImagem = data.animals.filter(
+        (pet) =>
+          pet.primary_photo_cropped || (pet.photos && pet.photos.length > 0)
+      );
 
-        setTotalDePaginas(nossoTotalDePaginas);
-      } catch (error) {
-        console.error("Erro ao buscar dados da Petfinder API:", error);
-      } finally {
-        setLoading(false); // 5. Libera para novas chamadas, mesmo se der erro
-      }
-    };
+      const formattedPets = petsComImagem.map((pet) => ({
+        id: pet.id,
+        name: pet.name,
+        price: pet.breeds.primary,
+        image:
+          pet.primary_photo_cropped?.medium || pet.photos[0]?.medium,
+      }));
 
-    fetchTokenAndPets();
-  }, [paginaAtual]); // Adicione paginaAtual como dependência
+      setPets(formattedPets);
+
+      const totalConsiderado = Math.min(
+        MAXIMO_DE_ANIMAIS,
+        data.pagination.total_count
+      );
+
+      setTotalDePaginas(
+        Math.ceil(totalConsiderado / produtosPorPagina)
+      );
+    } catch (error) {
+      console.error("Erro ao buscar dados da Petfinder API:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchTokenAndPets();
+}, [paginaAtual]);
+
 
   const mudarPaginaAtual = (numeroDaPagina) => {
     setPaginaAtual(numeroDaPagina);
